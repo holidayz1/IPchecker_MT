@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Name:     isthisipbad.py
+# Name:     IPchecker_MT.py
 # Purpose:  Checks Single or Bulk IPs against popular DNS Blackhole Services
 # By:       https://github.com/holidayz1
 # Date:     27.07.20
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         writeCSV(reslist)
     elif args.ip is None and args.filepath is not None: # Do the Magic
         ip_addr_list=openFile(args.filepath)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor() as executor:  # max number of threads = number of processors on the machine as per https://docs.python.org/3/library/concurrent.futures.html
             results = executor.map(Rep_Check_IP,ip_addr_list)
             for result in results:
                 reslist.append(result)
