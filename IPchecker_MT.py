@@ -21,7 +21,7 @@ def load_bldns_json():
         with open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'bldns.json'), 'r', encoding='utf8') as f:
             return json.load(f)
     except Exception as err:
-        print("Failed to read Configuration file with Error: "+str(err))
+        print("Failed to read DNS Blackhole JSON file with Error: "+str(err))
 
 
 def openFile(IPlist):
@@ -55,8 +55,8 @@ def Rep_Check_IP(ip_addr):
             query = '.'.join(reversed(str(ip_addr).split("."))) + "." + bl
             my_resolver.timeout = 10
             my_resolver.lifetime = 10
-            answers = my_resolver.query(query, "A")
-            answer_txt = my_resolver.query(query, "TXT")
+            answers = my_resolver.resolve(query, "A")
+            answer_txt = my_resolver.resolve(query, "TXT")
             if(message):
                 message=message+' || '+str('Listed in ' + str(bl) + ' (%s: %s)' % (answers[0], answer_txt[0]))
             else:
@@ -98,8 +98,8 @@ if __name__ == "__main__":
         writeCSV(reslist)
     elif args.ip is None and args.filepath is not None: # Do the Magic
         ip_addr_list=openFile(args.filepath)
-        with concurrent.futures.ThreadPoolExecutor() as executor:  # max number of threads = number of processors on the machine as per https://docs.python.org/3/library/concurrent.futures.html
-            results = executor.map(Rep_Check_IP,ip_addr_list)
-            for result in results:
-                reslist.append(result)
+        with concurrent.futures.ThreadPoolExecutor() as executor:  # max number of threads = number of processors on the machine 
+            results = executor.map(Rep_Check_IP,ip_addr_list)      # as per https://docs.python.org/3/library/concurrent.futures.html
+            for result in results:                                 # by adding max_workers= X in ThreadPoolExecutor() to make it ThreadPoolExecutor(max_workers=X)
+                reslist.append(result)                             
         writeCSV(reslist,args.filepath)
