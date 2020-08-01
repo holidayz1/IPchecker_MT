@@ -2,7 +2,7 @@
 # Name:     IPchecker_MT.py
 # Purpose:  Checks Single or Bulk IPs against popular DNS Blackhole Services
 # By:       https://github.com/holidayz1
-# Date:     27.07.20
+# Date:     01.08.20
 
 
 import sys
